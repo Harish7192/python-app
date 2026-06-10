@@ -6,7 +6,7 @@ app = Flask(__name__)
 def home():
     return jsonify({
         "status": "success",
-        "message": "Hello from your containerized app running on Compute Engine!"
+        "message": "Vanakam da mapla VM la irunthu!"
     })
 
 @app.route('/health')
