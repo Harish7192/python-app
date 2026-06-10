@@ -1,0 +1,25 @@
+steps:
+  # Step 1: Build the Docker image with proper tags
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build', 
+      '--tag=us-central1-docker.pkg.dev/project-ee16ab9f-709f-4851-b92/cloud-handson/my-app:$BUILD_ID', 
+      '--tag=us-central1-docker.pkg.dev/project-ee16ab9f-709f-4851-b92/cloud-handson/my-app:latest', 
+      '.'
+    ]
+
+  # Step 2: Push the latest tag to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'us-central1-docker.pkg.dev/project-ee16ab9f-709f-4851-b92/cloud-handson/my-app:latest']
+
+  # Step 3: Update your VM instance to run the container using your real project variables
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args: [
+      'compute', 'instances', 'update-container', 'bu-hands-on',
+      '--zone=us-central1-a',
+      '--container-image=us-central1-docker.pkg.dev/project-ee16ab9f-709f-4851-b92/cloud-handson/my-app:latest'
+    ]
+
+options:
+  logging: CLOUD_LOGGING_ONLY
